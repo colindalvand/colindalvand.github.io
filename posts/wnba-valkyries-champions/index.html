@@ -9,7 +9,7 @@
 <meta name="author" content="Colin Dalvand">
 <meta name="dcterms.date" content="2026-11-13">
 
-<title>The Golden State Valkyries are 2026 WNBA Champions; Here’s how they did it… – The Paradox of the 2026 WNBA Champions</title>
+<title>The Golden State Valkyries are 2026 WNBA Champions; Here’s how they did it… – Colin Dalvand</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -27,6 +27,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -264,7 +299,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">The Paradox of the 2026 WNBA Champions</span>
+    <span class="navbar-title">Colin Dalvand</span>
     </a>
   </div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -335,7 +370,212 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>This is a story about how the Golden State Valkyries became 2026 WNBA Champions.</p>
+<p>The 2026 Golden State Valkyries are one of the biggest anomalies in WNBA history.</p>
+<p>They won their first-ever championship on October 31st, 2026, beating the Atlanta Dream in seven games, thanks largely to a 30-point (WNBA postseason-record 28 in one half), 4-block performance from Gabby Williams in the 68–63 Game 7 clincher to win Finals MVP.</p>
+<p>Well, why is this so impressive? It’s just another WNBA Championship. Not for the violet team hailing from Ballhalla.</p>
+<p>The Valkyries entered their second-ever season in franchise history in 2026 with aspirations of making a deeper run in the playoffs than in 2025, when they became the first expansion team to reach the playoffs in year one.</p>
+<p>Finishing as the second-best team in the league was a great start, but how did they get there?</p>
+<p>Their offense wasn’t anything special, or even really good in 2026, ranking seventh out of 15 teams in offensive rating.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(wehoop)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>advanced_stats <span class="ot">&lt;-</span> <span class="fu">wnba_leaguedashteamstats</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">season =</span> <span class="st">"2026"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">season_type =</span> <span class="st">"Regular Season"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">measure_type =</span> <span class="st">"Advanced"</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>)<span class="sc">$</span>LeagueDashTeamStats <span class="sc">|&gt;</span> </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(TEAM_NAME, OFF_RATING, DEF_RATING, NET_RATING, PACE, TM_TOV_PCT, W, L)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>offteam_data_15 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">team_name =</span> <span class="fu">c</span>(<span class="st">"Atlanta Dream"</span>, <span class="st">"Chicago Sky"</span>, <span class="st">"Connecticut Sun"</span>, <span class="st">"Dallas Wings"</span>, </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Golden State Valkyries"</span>, <span class="st">"Indiana Fever"</span>, <span class="st">"Las Vegas Aces"</span>, <span class="st">"Los Angeles Sparks"</span>, </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Minnesota Lynx"</span>, <span class="st">"New York Liberty"</span>, <span class="st">"Phoenix Mercury"</span>, <span class="st">"Portland Fire"</span>, </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Seattle Storm"</span>, <span class="st">"Toronto Tempo"</span>, <span class="st">"Washington Mystics"</span>),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">off_rating =</span> <span class="fu">c</span>(<span class="fl">111.9</span>, <span class="fl">104.1</span>, <span class="fl">97.8</span>, <span class="fl">111.3</span>, <span class="fl">108.2</span>, <span class="dv">115</span>, <span class="fl">112.9</span>, <span class="fl">105.4</span>, <span class="fl">112.1</span>, <span class="fl">110.8</span>, <span class="fl">104.9</span>, <span class="fl">106.5</span>, <span class="fl">100.7</span>, <span class="fl">105.3</span>, <span class="fl">104.6</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>chart1_data <span class="ot">&lt;-</span> offteam_data_15 <span class="sc">|&gt;</span> </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">team_name =</span> <span class="fu">reorder</span>(team_name, off_rating),</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">valkyries =</span> team_name <span class="sc">==</span> <span class="st">"Golden State Valkyries"</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(chart1_data, <span class="fu">aes</span>(<span class="at">x =</span> off_rating, <span class="at">y =</span> team_name, <span class="at">fill =</span> valkyries)) <span class="sc">+</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">width =</span> <span class="fl">0.7</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"#d1d5db"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"#DFAAFF"</span>)) <span class="sc">+</span> </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%.1f"</span>, off_rating)), </span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.1</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">fontface =</span> <span class="st">"bold"</span>, </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">color =</span> <span class="fu">ifelse</span>(chart1_data<span class="sc">$</span>valkyries, <span class="st">"#111827"</span>, <span class="st">"#4b5563"</span>)) <span class="sc">+</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand_limits</span>(<span class="at">x =</span> <span class="fu">max</span>(chart1_data<span class="sc">$</span>off_rating) <span class="sc">*</span> <span class="fl">1.18</span>) <span class="sc">+</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"The Offensive Paradox of the 2026 WNBA Champions"</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Offensive Rating (Points per 100 Possessions) across each WNBA franchise"</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Offensive Rating"</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: wehoop / WNBA Stats API"</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">"sans"</span>) <span class="sc">+</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">5</span>)),</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"#6b7280"</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">9</span>, <span class="at">color =</span> <span class="st">"#111827"</span>),</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Only three of the 16 players that appeared in games averaged double figures: Gabby Williams, Janelle Salaün, and Veronica Burton. Their leader in points, Gabby Williams, still only averaged 14.4 points per game in 2026.</p>
+<p>Well, maybe they just shared the rock at an elite rate! If you thought yes, you might want to rethink that. The Valks were fifth in the WNBA in assist percentage, which is the percentage of a teammate’s made field goals a player assisted on while they were on the court.</p>
+<p>Their leader (and ninth in the entire W) in assists per game at 5.7, Veronica Burton, had more than double their next-best player, Tiffany Hayes, who averaged 2.5.</p>
+<p>Okay, so the Valkyries’ offense was alright, at best.</p>
+<p>What’s that old saying about championships? “Steals win championships.” No, hold on, that doesn’t sound right.</p>
+<p>Let’s head back to the graphs to see what actually wins championships.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>defteam_data_15 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">team_name =</span> <span class="fu">c</span>(<span class="st">"Atlanta Dream"</span>, <span class="st">"Chicago Sky"</span>, <span class="st">"Connecticut Sun"</span>, <span class="st">"Dallas Wings"</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Golden State Valkyries"</span>, <span class="st">"Indiana Fever"</span>, <span class="st">"Las Vegas Aces"</span>, <span class="st">"Los Angeles Sparks"</span>, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Minnesota Lynx"</span>, <span class="st">"New York Liberty"</span>, <span class="st">"Phoenix Mercury"</span>, <span class="st">"Portland Fire"</span>, </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Seattle Storm"</span>, <span class="st">"Toronto Tempo"</span>, <span class="st">"Washington Mystics"</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">def_rating =</span> <span class="fu">c</span>(<span class="fl">103.5</span>, <span class="fl">108.5</span>, <span class="fl">109.2</span>, <span class="fl">106.4</span>, <span class="fl">99.1</span>, <span class="fl">108.3</span>, <span class="fl">105.9</span>, <span class="fl">110.3</span>, <span class="fl">103.5</span>, <span class="fl">106.9</span>, <span class="fl">108.9</span>, <span class="fl">112.4</span>, <span class="fl">108.6</span>, <span class="dv">116</span>, <span class="fl">103.3</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">off_rating =</span> <span class="fu">c</span>(<span class="fl">111.9</span>, <span class="fl">104.1</span>, <span class="fl">97.8</span>, <span class="fl">111.3</span>, <span class="fl">108.2</span>, <span class="dv">115</span>, <span class="fl">112.9</span>, <span class="fl">105.4</span>, <span class="fl">112.1</span>, <span class="fl">110.8</span>, <span class="fl">104.9</span>, <span class="fl">106.5</span>, <span class="fl">100.7</span>, <span class="fl">105.3</span>, <span class="fl">104.6</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">wins =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">16</span>, <span class="dv">11</span>, <span class="dv">27</span>, <span class="dv">32</span>, <span class="dv">28</span>, <span class="dv">31</span>, <span class="dv">16</span>, <span class="dv">33</span>, <span class="dv">26</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">8</span>, <span class="dv">11</span>, <span class="dv">28</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>chart2_data <span class="ot">&lt;-</span> defteam_data_15 <span class="sc">|&gt;</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">team_name =</span> <span class="fu">reorder</span>(team_name, def_rating),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">valkyries =</span> team_name <span class="sc">==</span> <span class="st">"Golden State Valkyries"</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(chart2_data, <span class="fu">aes</span>(<span class="at">x =</span> off_rating, <span class="at">y =</span> def_rating)) <span class="sc">+</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(chart2_data<span class="sc">$</span>off_rating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"#9ca3af"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fu">mean</span>(chart2_data<span class="sc">$</span>def_rating, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"#9ca3af"</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> wins, <span class="at">color =</span> valkyries), <span class="at">alpha =</span> <span class="fl">0.85</span>, <span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"#9ca3af"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"#DFAAFF"</span>)) <span class="sc">+</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">10</span>)) <span class="sc">+</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span> </span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">filter</span>(chart2_data, valkyries),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> team_name),</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="st">"bold"</span>,</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">box.padding =</span> <span class="fl">0.5</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Elite Defense as the Ultimate Equalizer"</span>,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Valkyries sit in a league of their own."</span>,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Offensive Rating"</span>,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Defensive Rating"</span>,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: wehoop / WNBA Stats API"</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">"sans"</span>) <span class="sc">+</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">5</span>)),</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"#6b7280"</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>That’s right! It’s defense!</p>
+<p>The Valks sat at 99.1, with the second-ranked Washington Mystics at 103.3. They played timely defense and made stops when necessary. It took pressure off a mediocre offense that struggled to find its best form all season long.</p>
+<p>Gabby Williams, who finished second in Defensive Player of the Year voting, and Kiah Stokes, fourth in the WNBA in blocks per game (1.7), paved the way for GSV.</p>
+<p>Where do the 2026 Valkyries rank among all-time teams, though?</p>
+<p>In the 44-game era, this team is third, with the 2025 Valkyries right behind them at 99.8. The two better teams are 2025 Atlanta Dream (98.9) and 2025 Minnesota Lynx (97.5).</p>
+<p>A quick footnote about that ‘25 Dream team: that’s quite impressive when you don’t exactly have a “best defender.”</p>
+<p>The ‘26 Valkyries took a page out of that Atlanta Dream book, replicating a defense that didn’t have one true superstar.</p>
+<p>Shifting back to the offense for a minute, here’s an argument to consider: did they actually help more than their seventh-best offensive rating suggested?</p>
+<p>Let’s take a look at how their pace wore teams down:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>to_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">team_name =</span> <span class="fu">c</span>(<span class="st">"Atlanta Dream"</span>, <span class="st">"Chicago Sky"</span>, <span class="st">"Connecticut Sun"</span>, <span class="st">"Dallas Wings"</span>, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Golden State Valkyries"</span>, <span class="st">"Indiana Fever"</span>, <span class="st">"Las Vegas Aces"</span>, <span class="st">"Los Angeles Sparks"</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Minnesota Lynx"</span>, <span class="st">"New York Liberty"</span>, <span class="st">"Phoenix Mercury"</span>, <span class="st">"Portland Fire"</span>, </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Seattle Storm"</span>, <span class="st">"Toronto Tempo"</span>, <span class="st">"Washington Mystics"</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">def_rating =</span> <span class="fu">c</span>(<span class="fl">103.5</span>, <span class="fl">108.5</span>, <span class="fl">109.2</span>, <span class="fl">106.4</span>, <span class="fl">99.1</span>, <span class="fl">108.3</span>, <span class="fl">105.9</span>, <span class="fl">110.3</span>, <span class="fl">103.5</span>, <span class="fl">106.9</span>, <span class="fl">108.9</span>, <span class="fl">112.4</span>, <span class="fl">108.6</span>, <span class="dv">116</span>, <span class="fl">103.3</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">off_rating =</span> <span class="fu">c</span>(<span class="fl">111.9</span>, <span class="fl">104.1</span>, <span class="fl">97.8</span>, <span class="fl">111.3</span>, <span class="fl">108.2</span>, <span class="dv">115</span>, <span class="fl">112.9</span>, <span class="fl">105.4</span>, <span class="fl">112.1</span>, <span class="fl">110.8</span>, <span class="fl">104.9</span>, <span class="fl">106.5</span>, <span class="fl">100.7</span>, <span class="fl">105.3</span>, <span class="fl">104.6</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">wins =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">16</span>, <span class="dv">11</span>, <span class="dv">27</span>, <span class="dv">32</span>, <span class="dv">28</span>, <span class="dv">31</span>, <span class="dv">16</span>, <span class="dv">33</span>, <span class="dv">26</span>, <span class="dv">16</span>, <span class="dv">17</span>, <span class="dv">8</span>, <span class="dv">11</span>, <span class="dv">28</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">opp_tov_pct_per_poss =</span> <span class="fu">c</span>(<span class="fl">18.7</span>, <span class="fl">15.9</span>, <span class="fl">17.1</span>, <span class="fl">14.8</span>, <span class="fl">17.8</span>, <span class="fl">15.6</span>, <span class="fl">16.5</span>, <span class="fl">17.0</span>, <span class="fl">18.6</span>, <span class="fl">14.1</span>, <span class="fl">16.5</span>, <span class="fl">17.4</span>, <span class="fl">16.5</span>, <span class="fl">15.3</span>, <span class="fl">15.2</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">pace =</span> <span class="fu">c</span>(<span class="fl">97.67</span>, <span class="fl">99.58</span>, <span class="fl">96.49</span>, <span class="fl">95.7</span>, <span class="fl">90.79</span>, <span class="fl">99.03</span>, <span class="fl">96.65</span>, <span class="fl">98.92</span>, <span class="fl">97.08</span>, <span class="fl">96.43</span>, <span class="fl">96.22</span>, <span class="fl">95.78</span>, <span class="fl">97.81</span>, <span class="fl">97.33</span>, <span class="fl">94.66</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>chart3_data <span class="ot">&lt;-</span> to_data <span class="sc">|&gt;</span> </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">team_name =</span> <span class="fu">reorder</span>(team_name, opp_tov_pct_per_poss),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">valkyries =</span> team_name <span class="sc">==</span> <span class="st">"Golden State Valkyries"</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(chart3_data, <span class="fu">aes</span>(<span class="at">x =</span> opp_tov_pct_per_poss, <span class="at">y =</span> pace, <span class="at">size =</span> wins, <span class="at">fill =</span> valkyries)) <span class="sc">+</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">21</span>, <span class="at">color =</span> <span class="st">"#111827"</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"#9ca3af"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"#DFAAFF"</span>),</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">guide =</span> <span class="st">"none"</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">range =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">14</span>),</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">"Wins"</span>) <span class="sc">+</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_repel</span>(</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label =</span> team_name),</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">3.5</span>,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">fontface =</span> <span class="st">"bold"</span>,</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#111827"</span>,</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">box.padding =</span> <span class="fl">0.5</span>,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">show.legend =</span> <span class="cn">FALSE</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Starving Opponents of Possessions"</span>,</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"The Valkyries would use their methodical pace to force more turnovers on the other end."</span>,</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Opponent Turnover Percentage (%)"</span>,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Pace (Possessions per 40 Minutes)"</span>,</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Source: wehoop / WNBA Stats API"</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_family =</span> <span class="st">"sans"</span>) <span class="sc">+</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">size =</span> <span class="dv">14</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">5</span>)),</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>, <span class="at">color =</span> <span class="st">"#6b7280"</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">15</span>)),</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By slowing things down on the offensive end, the Valkyries would tire out their opponents before they would take possession back down the other side of the court.</p>
+<p>Taking a look back, this 2026 GSV team had the slowest pace since 2015, when the WNBA was an all-around much slower league. In the 2015 season, four teams ranked below 90 in pace. Since that season, there hasn’t been a team that has ranked below 90, with the 2026 Valkyries coming closest at 90.79.</p>
+<p>The second part of this graph shows how the Valks used their methodical offense to suffocate their opponents into turnovers, ranking third in opponent turnover percentage.</p>
+<p>So was their offense actually the catalyst for their defense? You could make the argument, but my final answer is that their defense was just too good for teams to play past.</p>
 
 
 
